@@ -13,7 +13,7 @@
           target="_blank"
           href="https://github.com/vonKaster"
           >vonKaster</a
-        > & <a class="footerLink" href="">Juana Molina</a>
+        > & <a class="footerLink" href="https://github.com/juanamolinalucia2001">Juana Molina</a>
         (Front-End Rookies for Digicard)</strong
       >
     </v-col>
