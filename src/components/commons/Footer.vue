@@ -6,15 +6,15 @@
     padless
   >
     <v-col class="text-center" cols="12">
-      {{ new Date().getFullYear() }} —
+      {{ new Date().getFullYear() }} © —
       <strong
         ><a
           class="footerLink"
           target="_blank"
           href="https://github.com/vonKaster"
           >vonKaster</a
-        >
-        (Front-End Rookie for Digicard)</strong
+        > & <a class="footerLink" href="https://github.com/juanamolinalucia2001">Juana Molina</a>
+        (Front-End Rookies for Digicard)</strong
       >
     </v-col>
   </v-footer>
@@ -27,7 +27,7 @@ export default {
 
 <style>
 .footerLink {
-  color: #e6105b !important;
+  color: #6247aa !important;
   text-decoration: none;
 }
 

@@ -3,7 +3,7 @@
     <v-app-bar id="navbar" class="marginBottom" app fixed>
       <v-toolbar-title>
         <router-link :to="{ name: 'home' }">
-          <img class="mt-4" :src="require('../assets/logodigicard.png')" />
+          <img class="mt-4" :src="require('../../assets/logodigicard.png')" />
         </router-link>
       </v-toolbar-title>
       <v-spacer />
@@ -169,11 +169,11 @@ export default {
 }
 
 .v-btn:hover {
-  color: #e6105b;
+  color: #6247aa;
 }
 
 .v-btn--active {
-  color: #e6105b !important;
+  color: #6247aa !important;
 }
 
 .v-btn--is-elevated {
