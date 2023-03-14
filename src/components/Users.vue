@@ -140,7 +140,7 @@
               dense
               solo
               v-model="userData.nombreUsuario"
-              append-icon="mdi-file-document-edit"
+              append-icon="mdi-account-edit"
             ></v-text-field>
 
             <h3>
@@ -153,7 +153,7 @@
               dense
               solo
               v-model="userData.correo"
-              append-icon="mdi-image-edit"
+              append-icon="mdi-email"
             ></v-text-field>
 
             <h3>
@@ -166,7 +166,7 @@
               dense
               solo
               v-model="userData.telefono"
-              append-icon="mdi-image-edit"
+              append-icon="mdi-cellphone"
             ></v-text-field>
 
             <h3>
@@ -179,7 +179,7 @@
               dense
               solo
               v-model="userData.sitioWeb"
-              append-icon="mdi-image-edit"
+              append-icon="mdi-web"
             ></v-text-field>
 
             <h3>
@@ -192,7 +192,7 @@
               dense
               solo
               v-model="userData.direccion.calle"
-              append-icon="mdi-application-edit"
+              append-icon="mdi-map-marker"
             ></v-text-field>
 
             <h3>
@@ -205,7 +205,7 @@
               dense
               solo
               v-model="userData.direccion.departamento"
-              append-icon="mdi-cash"
+              append-icon="mdi-numeric"
             ></v-text-field>
 
             <h3>
@@ -218,7 +218,7 @@
               dense
               solo
               v-model="userData.direccion.ciudad"
-              append-icon="mdi-cash"
+              append-icon="mdi-map-outline"
             ></v-text-field>
 
             <h3>
@@ -231,7 +231,7 @@
               dense
               solo
               v-model="userData.direccion.codigoPostal"
-              append-icon="mdi-cash"
+              append-icon="mdi-counter"
             ></v-text-field>
 
             <v-card-actions>
