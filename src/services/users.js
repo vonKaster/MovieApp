@@ -30,6 +30,7 @@ class service {
 
     return axios.post(`${url}`, payload);
   }
+
   async editUser(data) {
     const url = "https://jsonplaceholder.typicode.com/users/";
     let payload = {
@@ -52,6 +53,11 @@ class service {
     } catch (error) {
       throw new Error(`Error al editar el usuario: ${error.message}`);
     }
+  }
+
+  async deleteUser(userId) {
+    const url = "https://jsonplaceholder.typicode.com/users/";
+    await axios.delete(`${url}${userId}`);
   }
 }
 

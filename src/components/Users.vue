@@ -42,13 +42,34 @@
                 <v-avatar class="ms-4"
                   ><v-img width="48px" src="../assets/user.jpg"></v-img
                 ></v-avatar>
-                <v-card-title style="font-size: 16px" class="flex-grow-1">{{
-                  usuario.nombre
-                }}</v-card-title>
+                <v-tooltip bottom>
+                  <template v-slot:activator="{ on }">
+                    <v-card-title
+                      style="
+                        font-size: 16px;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                      "
+                      v-on="on"
+                    >
+                      {{ usuario.nombre }}
+                    </v-card-title>
+                  </template>
+                  <span>{{ usuario.nombre }}</span>
+                </v-tooltip>
+
                 <v-btn x-small text @click="openEditDialog(usuario)"
                   ><v-icon>mdi-pencil</v-icon></v-btn
                 >
-                <v-btn x-small text class="mr-2" @click="showUserDialog(usuario)"
+                <v-btn x-small text @click="openDeleteDialog(usuario)"
+                  ><v-icon>mdi-delete</v-icon></v-btn
+                >
+                <v-btn
+                  x-small
+                  text
+                  class="mr-2"
+                  @click="showUserDialog(usuario)"
                   ><v-icon>mdi-more</v-icon></v-btn
                 >
               </div>
@@ -228,6 +249,36 @@
           </v-form>
         </v-card>
       </v-dialog>
+      <v-dialog width="500px" v-model="deleteDialog" persistent>
+          <v-card class="text-center">
+            <v-card-title class="headline"
+              >Eliminar Usuario [{{ selectedUser.id }}]</v-card-title
+            >
+            <h3>
+              <p>¿Estás seguro que deseas eliminar este usuario?</p>
+            </h3>
+            <v-card-actions>
+              <v-btn
+                text
+                @click="
+                  deleteDialog = false;
+                  resetUserData();
+                "
+                >Cancelar</v-btn
+              >
+              <v-btn
+                color="red"
+                text
+                @click="
+                  deleteUser(selectedUser.id);
+                  deleteDialog = false;
+                  resetUserData();
+                "
+                >Confirmar</v-btn
+              >
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
     </v-container>
   </div>
 </template>
@@ -244,6 +295,7 @@ export default {
       dialog: false,
       selectedUser: {},
       editDialog: false,
+      deleteDialog: false,
       userEdited: null,
       userData: {
         nombre: null,
@@ -295,8 +347,11 @@ export default {
     openAddDialog() {
       this.editDialog = true;
     },
+    openDeleteDialog(user) {
+      this.deleteDialog = true;
+      this.selectedUser = user;
+    },
     async createUser(data) {
-      console.log("DATA COMPONENTE", data);
       this.editDialog = false;
       await users.dispatch("createUser", data);
       this.selectedUser = {};
@@ -304,12 +359,15 @@ export default {
     },
     async editUser(data) {
       this.editDialog = false;
-      console.log(data.id);
-      console.log("DATA COMPONENTE", data);
       await users.dispatch("editUser", data);
       this.selectedUser = {};
       this.resetUserData();
       this.editingProduct = false;
+    },
+    async deleteUser(data) {
+      this.deleteDialog = false;
+      await users.dispatch("deleteUser", data);
+      this.selectedUser = {};
     },
     resetUserData() {
       this.userData = {
@@ -325,7 +383,7 @@ export default {
           codigoPostal: null,
         },
       };
-    }
+    },
   },
 };
 </script>
