@@ -39,39 +39,42 @@
           >
             <v-card class="mt-4">
               <div class="d-flex justify-space-between align-center">
-                <v-avatar class="ms-4"
-                  ><v-img width="48px" src="../assets/user.jpg"></v-img
-                ></v-avatar>
-                <v-tooltip bottom>
-                  <template v-slot:activator="{ on }">
-                    <v-card-title
-                      style="
-                        font-size: 16px;
-                        white-space: nowrap;
-                        overflow: hidden;
-                        text-overflow: ellipsis;
-                      "
-                      v-on="on"
-                    >
-                      {{ usuario.nombre }}
-                    </v-card-title>
-                  </template>
-                  <span>{{ usuario.nombre }}</span>
-                </v-tooltip>
-
-                <v-btn x-small text @click="openEditDialog(usuario)"
-                  ><v-icon>mdi-pencil</v-icon></v-btn
-                >
-                <v-btn x-small text @click="openDeleteDialog(usuario)"
-                  ><v-icon>mdi-delete</v-icon></v-btn
-                >
-                <v-btn
-                  x-small
-                  text
-                  class="mr-2"
-                  @click="showUserDialog(usuario)"
-                  ><v-icon>mdi-more</v-icon></v-btn
-                >
+                <div class="d-flex align-center">
+                  <v-avatar class="ms-4"
+                    ><v-img width="48px" src="../assets/user.jpg"></v-img
+                  ></v-avatar>
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on }">
+                      <v-card-title
+                        style="
+                          font-size: 16px;
+                          white-space: nowrap;
+                          overflow: hidden;
+                          text-overflow: ellipsis;
+                        "
+                        v-on="on"
+                      >
+                        {{ usuario.nombre }}
+                      </v-card-title>
+                    </template>
+                    <span>{{ usuario.nombre }}</span>
+                  </v-tooltip>
+                </div>
+                <div>
+                  <v-btn x-small text @click="openEditDialog(usuario)"
+                    ><v-icon>mdi-pencil</v-icon></v-btn
+                  >
+                  <v-btn x-small text @click="openDeleteDialog(usuario)"
+                    ><v-icon>mdi-delete</v-icon></v-btn
+                  >
+                  <v-btn
+                    x-small
+                    text
+                    class="mr-2"
+                    @click="showUserDialog(usuario)"
+                    ><v-icon>mdi-more</v-icon></v-btn
+                  >
+                </div>
               </div>
             </v-card>
           </v-col>
@@ -121,6 +124,7 @@
               <p>Nombre</p>
             </h3>
             <v-text-field
+              color="#6247aa"
               type="text"
               style="width: 400px"
               class="mx-auto"
@@ -134,6 +138,7 @@
               <p>Usuario</p>
             </h3>
             <v-text-field
+              color="#6247aa"
               type="text"
               style="width: 400px"
               class="mx-auto"
@@ -147,6 +152,7 @@
               <p>Correo Electrónico</p>
             </h3>
             <v-text-field
+              color="#6247aa"
               type="text"
               style="width: 400px"
               class="mx-auto"
@@ -160,6 +166,7 @@
               <p>Teléfono</p>
             </h3>
             <v-text-field
+              color="#6247aa"
               type="text"
               style="width: 400px"
               class="mx-auto"
@@ -173,6 +180,7 @@
               <p>Sitio Web</p>
             </h3>
             <v-text-field
+              color="#6247aa"
               type="text"
               style="width: 400px"
               class="mx-auto"
@@ -186,6 +194,7 @@
               <p>Calle</p>
             </h3>
             <v-text-field
+              color="#6247aa"
               type="text"
               style="width: 400px"
               class="mx-auto"
@@ -199,6 +208,7 @@
               <p>Departamento</p>
             </h3>
             <v-text-field
+              color="#6247aa"
               type="text"
               style="width: 400px"
               class="mx-auto"
@@ -212,6 +222,7 @@
               <p>Ciudad</p>
             </h3>
             <v-text-field
+              color="#6247aa"
               type="text"
               style="width: 400px"
               class="mx-auto"
@@ -225,6 +236,7 @@
               <p>Codigo Postal</p>
             </h3>
             <v-text-field
+              color="#6247aa"
               type="text"
               style="width: 400px"
               class="mx-auto"
@@ -250,35 +262,35 @@
         </v-card>
       </v-dialog>
       <v-dialog width="500px" v-model="deleteDialog" persistent>
-          <v-card class="text-center">
-            <v-card-title class="headline"
-              >Eliminar Usuario [{{ selectedUser.id }}]</v-card-title
+        <v-card class="text-center">
+          <v-card-title class="headline"
+            >Eliminar Usuario [{{ selectedUser.id }}]</v-card-title
+          >
+          <h3>
+            <p>¿Estás seguro que deseas eliminar este usuario?</p>
+          </h3>
+          <v-card-actions>
+            <v-btn
+              text
+              @click="
+                deleteDialog = false;
+                resetUserData();
+              "
+              >Cancelar</v-btn
             >
-            <h3>
-              <p>¿Estás seguro que deseas eliminar este usuario?</p>
-            </h3>
-            <v-card-actions>
-              <v-btn
-                text
-                @click="
-                  deleteDialog = false;
-                  resetUserData();
-                "
-                >Cancelar</v-btn
-              >
-              <v-btn
-                color="red"
-                text
-                @click="
-                  deleteUser(selectedUser.id);
-                  deleteDialog = false;
-                  resetUserData();
-                "
-                >Confirmar</v-btn
-              >
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
+            <v-btn
+              color="red"
+              text
+              @click="
+                deleteUser(selectedUser.id);
+                deleteDialog = false;
+                resetUserData();
+              "
+              >Confirmar</v-btn
+            >
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-container>
   </div>
 </template>
