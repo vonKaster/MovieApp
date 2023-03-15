@@ -2,7 +2,7 @@
   <div>
     <v-app-bar id="navbar" class="marginBottom" app fixed>
       <v-toolbar-title>
-        <router-link :to="{ name: 'home' }">
+        <router-link :to="{ name: 'posts' }">
           <img class="mt-4" :src="require('../../assets/logodigicard.png')" />
         </router-link>
       </v-toolbar-title>
@@ -71,7 +71,7 @@
         </v-list>
       </v-menu>
       <v-toolbar-items v-if="!showMenu && $vuetify.breakpoint.mdAndUp">
-        <v-btn color="black" :to="{ name: 'home' }"
+        <v-btn color="black" :to="{ name: 'posts' }"
           ><v-icon class="mr-1">mdi-home</v-icon>Inicio</v-btn
         >
         <v-btn color="black" :to="{ name: 'users' }"

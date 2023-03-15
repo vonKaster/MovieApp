@@ -31,7 +31,6 @@
 
 
 <style scoped>
-<style scoped>
 .tweet-card {
   margin-bottom: 24px;
   border-radius: 12px;
