@@ -1,26 +1,53 @@
 import axios from "axios";
-import Post from "@/models/posts";
+import post from "@/models/posts";
 
 class PostService {
-  getAllPosts() {
+    //traigo todos los posts de la API
+getAllPost() {
     const url = "https://jsonplaceholder.typicode.com/posts";
-
-    return axios.get(`${url}`).then(({ data }) => {
-      return data.map((item) => {
-        return Post.fromJson(item);
-      });
+    return axios.get(url).then(({ data }) => {
+        return data.map((item) => {
+            return post.fromJson(item);
+        });
     });
-  }
+    }
+    
 
-  getPostById(id) {
-    const url = `https://jsonplaceholder.typicode.com/posts/${id}`;
+    new(data){
+        const url = "https://jsonplaceholder.typicode.com/posts";
+        let payload ={
+            title: data.title,
+            body: data.body,
+            userId: data.userId,
+        }
+         return axios.post(`${url}`, payload)
+        
+      }
 
-    return axios.get(`${url}`).then(({ data }) => {
-      return Post.fromJson(data);
-    });
-  }
 
-
+    edit(data){
+        console.log('edit data',data)
+        const url = "https://jsonplaceholder.typicode.com/posts"
+        let payload ={
+            id:data.id,
+            title: data.title,
+            body: data.body,
+            userId: data.userId,
+        }
+        return axios
+        .put(`${url}${data.id}`, payload)
+        
+      }
+      
+    delete(id){
+        const url = "https://jsonplaceholder.typicode.com/posts/"
+        return axios
+        .delete(`${url}${id}`, )
+      }
+    
+ 
 }
+export default PostService ;
 
-export default PostService;
+
+
