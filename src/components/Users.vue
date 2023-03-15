@@ -13,7 +13,7 @@
             <v-card class="mt-4">
               <v-skeleton-loader
                 height="64px"
-                width="371px"
+                width="auto"
                 type="image"
               ></v-skeleton-loader>
               <v-card-title v-if="isLoaded">{{ usuario.nombre }}</v-card-title>
@@ -24,7 +24,7 @@
       <div v-if="isLoaded">
         <v-row>
           <v-col class="text-center">
-            <v-btn class="mt-4" text @click="openAddDialog()"
+            <v-btn class="mt-4 elevation-2" text @click="openAddDialog()"
               >Crear Usuario</v-btn
             >
           </v-col>
@@ -41,20 +41,19 @@
               <div class="d-flex justify-space-between align-center">
                 <div class="d-flex align-center">
                   <v-avatar class="ms-4"
-                    ><v-img width="48px" src="../assets/user.jpg"></v-img
+                    ><v-img
+                      width="48px"
+                      :src="'https://i.pravatar.cc/100?img=' + usuario.id"
+                    ></v-img
                   ></v-avatar>
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on }">
-                      <v-card-title
-                        style="
-                          font-size: 16px;
-                          white-space: nowrap;
-                          overflow: hidden;
-                          text-overflow: ellipsis;
-                        "
-                        v-on="on"
-                      >
-                        {{ usuario.nombre }}
+                      <v-card-title class="card-title" v-on="on">
+                        <router-link
+                          :to="{ name: 'user', params: { id: usuario.id } }"
+                        >
+                          {{ usuario.nombre }}
+                        </router-link>
                       </v-card-title>
                     </template>
                     <span>{{ usuario.nombre }}</span>
@@ -400,7 +399,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .theme--dark .v-btn {
   background-color: #1e1e1e !important;
   color: white;
@@ -425,5 +424,17 @@ export default {
 
 .v-btn:before {
   background-color: #ffffff !important;
+}
+
+a {
+  text-decoration: none !important;
+  color: #6247aa !important;
+}
+
+.card-title {
+  font-size: 16px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 </style>
