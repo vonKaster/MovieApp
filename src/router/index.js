@@ -19,14 +19,15 @@ const routes = [
   {
     path: '/users',
     name: 'users',
-    component: UsersView
+    component: UsersView,
+    props: (route) => ({ deletedId: route.query.deletedId })
   },
   {
     path: '/users/:id',
     name: 'user',
     component: UserView
   }
-]
+];
 
 const router = new VueRouter({
   mode: 'history',

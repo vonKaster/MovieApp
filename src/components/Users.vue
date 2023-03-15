@@ -330,8 +330,10 @@ export default {
   },
 
   async mounted() {
+    const deletedId = this.$route.query.deletedId;
     try {
       await Promise.all([users.dispatch("getAllUsers")]);
+      this.deleteUser(deletedId);
       this.isLoaded = true;
     } catch (error) {
       console.log(error);

@@ -3,7 +3,7 @@ import todos from "@/models/todos";
 
 class service {
   
-  getTodosByUserId(id) {
+  getTasksByUserId(id) {
     const url = `https://jsonplaceholder.typicode.com/todos`;
   
     return axios.get(`${url}`).then(({ data }) => {
@@ -15,7 +15,11 @@ class service {
     });
   }
   
-  
+  async deleteTask(id) {
+    const url = "https://jsonplaceholder.typicode.com/todos/";
+    await axios.delete(`${url}${id}`);
+  }
+
 }
 
 export default service;
