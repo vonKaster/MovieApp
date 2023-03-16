@@ -1,8 +1,9 @@
 import axios from "axios";
 import post from "@/models/posts";
+import comentario from "@/models/comments";
 
 class PostService {
-    //traigo todos los posts de la API
+//traigo todos los posts de la API
 getAllPost() {
     const url = "https://jsonplaceholder.typicode.com/posts";
     return axios.get(url).then(({ data }) => {
@@ -11,10 +12,18 @@ getAllPost() {
         });
     });
     }
+
+getPostById(id){
+    const url = `https://jsonplaceholder.typicode.com/posts/${id}`;
+  
+    return axios.get(url).then(({ data }) => {
+      return post.fromJson(data);
+    });
+}
     
 
     new(data){
-        const url = "https://jsonplaceholder.typicode.com/posts";
+        const url = "https://jsonplaceholder.typicode.com/posts/";
         let payload ={
             title: data.title,
             body: data.body,
@@ -23,11 +32,17 @@ getAllPost() {
          return axios.post(`${url}`, payload)
         
       }
-
+      
+    delete(id){
+        console.log(id, 'delete srvice')
+        const url = "https://jsonplaceholder.typicode.com/posts/"
+        return axios
+        .delete(`${url}${id}`)
+      }
 
     edit(data){
         console.log('edit data',data)
-        const url = "https://jsonplaceholder.typicode.com/posts"
+        const url = "https://jsonplaceholder.typicode.com/posts/"
         let payload ={
             id:data.id,
             title: data.title,
@@ -38,16 +53,17 @@ getAllPost() {
         .put(`${url}${data.id}`, payload)
         
       }
-      
-    delete(id){
-        const url = "https://jsonplaceholder.typicode.com/posts/"
-        return axios
-        .delete(`${url}${id}`, )
-      }
+
+    getComments(id){
+        const url = `https://jsonplaceholder.typicode.com/posts/${id}/comments`
+        return axios.get(url).then(({ data }) => {
+            return data.map((item) => {
+              return comentario.fromJson(item);
+            });
+        });
+    }
     
  
 }
 export default PostService ;
-
-
 
