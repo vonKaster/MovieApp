@@ -13,7 +13,9 @@
             <v-card class="mt-4">
               <v-skeleton-loader
                 height="64px"
+
                 width="371px"
+
                 type="image"
               ></v-skeleton-loader>
               <v-card-title v-if="isLoaded">{{ usuario.nombre }}</v-card-title>
@@ -24,7 +26,9 @@
       <div v-if="isLoaded">
         <v-row>
           <v-col class="text-center">
+
             <v-btn class="mt-4" text @click="openAddDialog()"
+
               >Crear Usuario</v-btn
             >
           </v-col>
@@ -41,6 +45,7 @@
               <div class="d-flex justify-space-between align-center">
                 <div class="d-flex align-center">
                   <v-avatar class="ms-4"
+
                     ><v-img width="48px" src="../assets/user.jpg"></v-img
                   ></v-avatar>
                   <v-tooltip bottom>
@@ -55,6 +60,7 @@
                         v-on="on"
                       >
                         {{ usuario.nombre }}
+
                       </v-card-title>
                     </template>
                     <span>{{ usuario.nombre }}</span>
@@ -343,6 +349,7 @@ export default {
     getAllUsers() {
       return users.state.allUsers;
     },
+
   },
 
   methods: {
@@ -400,7 +407,9 @@ export default {
 };
 </script>
 
+
 <style>
+
 .theme--dark .v-btn {
   background-color: #1e1e1e !important;
   color: white;
@@ -426,4 +435,5 @@ export default {
 .v-btn:before {
   background-color: #ffffff !important;
 }
+
 </style>

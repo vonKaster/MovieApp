@@ -1,6 +1,8 @@
 <template>
     <users />
+
   </template>
+
   
   <script>
     import users from '../components/Users'

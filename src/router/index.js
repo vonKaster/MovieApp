@@ -3,23 +3,41 @@ import VueRouter from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import UsersView from '../views/UsersView.vue'
 
+
+
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: "/",
-    redirect: { name: "home" },
+    redirect: { name: "posts" },
   },
   {
-    path: '/home',
-    name: 'home',
+    path: '/posts',
+    name: 'posts',
     component: HomeView
   },
+  {
+    path: '/posts/:id',
+    name: 'post',
+    component: PostView
+  },
+  {
+    redirect: { name: "home" },
+  },
+  
   {
     path: '/users',
     name: 'users',
     component: UsersView
   },
+
+  {
+    path: '/users/:id',
+    name: 'user',
+    component: UserView
+  }
+
 ]
 
 const router = new VueRouter({

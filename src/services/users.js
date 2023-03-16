@@ -12,6 +12,27 @@ class service {
     });
   }
 
+  getUserById(id) {
+    const url = `https://jsonplaceholder.typicode.com/users/${id}`;
+  
+    return axios.get(url).then(({ data }) => {
+      return users.fromJson(data);
+    });
+  }
+  
+  getTodosByUserId(id) {
+    const url = `https://jsonplaceholder.typicode.com/todos`;
+  
+    return axios.get(`${url}`).then(({ data }) => {
+      return data.filter((item) => {
+        return item.userId === id;
+      }).map((item) => {
+        return todos.fromJson(item);
+      });
+    });
+  }
+  
+
   createUser(data) {
     const url = "https://jsonplaceholder.typicode.com/users";
     let payload = {
