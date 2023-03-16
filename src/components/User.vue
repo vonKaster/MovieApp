@@ -347,11 +347,13 @@
                 <p>Estado</p>
               </h3>
               <v-select
+                color="#6247aa"
                 class="mx-auto"
                 style="width: 400px"
-                :items="taskData.completado"
+                :items="options"
                 label="Solo field"
                 solo
+                v-model="taskData.completado"
               ></v-select>
             </div>
 
@@ -458,6 +460,10 @@ export default {
       editingUser: false,
       editingTask: false,
       deletingUser: false,
+      options: [
+        { text: "Completada", value: true },
+        { text: "No Completada", value: false },
+      ],
     };
   },
 
@@ -510,12 +516,25 @@ export default {
     openAddTaskDialog() {
       this.editTaskDialog = true;
     },
+    async createTask(data) {
+      console.log("create task componente");
+      this.editTaskDialog = false;
+      await todos.dispatch("createTask", data);
+      this.resetTaskData();
+    },
+    async editTask(data) {
+      this.editTaskDialog = false;
+      await todos.dispatch("editTask", data);
+      this.selectedTask = {};
+      this.resetTaskData();
+      this.editingTask = false;
+    },
     async editUser(data) {
       this.editUserDialog = false;
       await users.dispatch("editUser", data);
       this.selectedUser = {};
       this.resetUserData();
-      this.editingProduct = false;
+      this.editingUser = false;
     },
     async deleteUser(data) {
       this.deleteDialog = false;
