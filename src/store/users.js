@@ -1,5 +1,8 @@
 import Vue from "vue";
 import Vuex from "vuex";
+
+import users from "@/models/users";
+
 import service from "@/services/users";
 
 Vue.use(Vuex);
@@ -8,7 +11,9 @@ export default new Vuex.Store({
   state: {
     service: new service(),
     allUsers: [],
+
     userById: {}
+
   },
   getters: {},
   mutations: {
@@ -18,6 +23,7 @@ export default new Vuex.Store({
     setUserById(state, data) {
       state.userById = data;
     },
+
   },
   actions: {
     async getAllUsers(state) {
@@ -31,6 +37,7 @@ export default new Vuex.Store({
         }
       });
     },
+
     async getUserById(state, id) {
       try {
         let item = await state.state.service.getUserById(id);
@@ -41,6 +48,7 @@ export default new Vuex.Store({
       }
     },
     
+
     async createUser(state, data) {
       return new Promise(async (resolve, reject) => {
         try {
