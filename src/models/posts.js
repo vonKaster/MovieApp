@@ -1,13 +1,13 @@
 class posts {
-      constructor( id,userId, title, body) {
-      this.id = id;
+      constructor(userId, id, title, body) {
       this.userId = userId;
+      this.id = id;
       this.title = title;
       this.body = body;
       }
       
-      static fromJson({  id, userId, title, body }) {
-      return new posts(id, userId,  title, body);
+      static fromJson({ userId, id, title, body }) {
+      return new posts(userId, id, title, body);
       }
       }
       
