@@ -1,20 +1,21 @@
 <template>
 
-  <v-container>
-     <v-col class="container__add" cols="12">
+  <v-container >
+     <v-col cols="12">
           <v-btn class="mx-2" fab dark color="#6247AA" @click="openForm" >
               <v-icon>mdi-plus</v-icon>
           </v-btn>
     </v-col>
-    <v-row>
-      <v-col v-for="(post, index) in allPosts" :key="index" cols="12" sm="6" md="4">
+     <v-container fluid>
+    <v-row align="center" justify="center" v-for="(post, index) in allPosts" :key="index">
+      <v-col cols="12" sm="8" md="6">
         <v-card class="tweet-card">
           <v-card-title>
             <v-avatar size="36">
               <img :src="'https://i.pravatar.cc/100?img=' + post.userId" alt="">
             </v-avatar>
-            <div class="tweet-user-info" >
-              <div class="tweet-username ml-3">User {{ post.userId }}</div>
+            <div class="tweet-user-info">
+              <div class="tweet-username ml-3">{{ getUserEmail(post.userId) }}</div>
             </div>
             <v-spacer></v-spacer>
             <v-menu offset-y>
@@ -26,7 +27,7 @@
                   <v-icon>mdi-pencil</v-icon>
                   <v-list-item-title>Edit</v-list-item-title>
                 </v-list-item>
-                <v-list-item  @click=" deleteProduct(post)">
+                <v-list-item @click="deleteProduct(post)">
                   <v-icon>mdi-delete</v-icon>
                   <v-list-item-title>Delete</v-list-item-title>
                 </v-list-item>
@@ -35,7 +36,7 @@
           </v-card-title>
           <v-card-text>{{ post.body }}</v-card-text>
           <v-card-actions>
-            <v-btn :to="{ name: 'home', params: { id: post.id } }" text>Read more</v-btn>
+            <v-btn :to="{ name:'post', params: { id: post.id } }" text>Read more</v-btn>
             <v-spacer></v-spacer>
             <v-btn icon>
               <v-icon>mdi-heart</v-icon>
@@ -45,46 +46,51 @@
             </v-btn>
           </v-card-actions>
         </v-card>
+        
       </v-col>
     </v-row>
-    <v-dialog v-model="showAdd"  >
-                  <v-card>
-                  
-                         <v-btn text @click="cancel">
-                                x
-                      </v-btn>
-                    <v-row class="mt-2 ml-5 mb-5">
-                     <v-avatar size="40">
-                      <img :src="'https://i.pravatar.cc/100?img=' + data.userId" alt="">
-                    </v-avatar>
-                    </v-row>
+  </v-container>
+  <v-dialog v-model="showAdd" max-width="450">
+  <v-card>
+    <v-card-title>
+      <v-avatar size="36">
+        <img :src="'https://i.pravatar.cc/100?img=' + data.userId" alt="">
+      </v-avatar>
+    </v-card-title>
+    <v-card-text>
+      <v-form ref="form" v-model="valid" @submit.prevent="validate">
+        <v-textarea
+          v-model="data.body"
+          filled
+          label="What's Happenin?"
+          :rules="rules"
+          rows="4"
+          autofocus
+          counter
+        ></v-textarea>
+      </v-form>
+    </v-card-text>
+    <v-card-actions>
+      <v-spacer></v-spacer>
+      <v-btn text color="primary" @click="cancel">Cancel</v-btn>
+      <v-btn
+        rounded
+        color="primary"
+        :disabled="!valid"
+        @click="validate"
+      >
+        tweet
+      </v-btn>
+    </v-card-actions>
+  </v-card>
+</v-dialog>
 
-                        
-                        <div class="flex-center">
-                              <v-form ref="form" v-model="valid">
-                                     <v-alert dense v-if="error" color="red" elevation="5" outlined text type="error"
-                                          align="center" class="mr-1 ml-1">
-                                          {{ alertValidate }}</v-alert>
-                                    <v-text-field v-model="data.title" filled rounded dense label="titlePost"
-                                          :rules="rules" />
-                                    <v-textarea v-model="data.body" filled rounded dense label="What's Happenin?"
-                                          :rules="rules" />
-                              </v-form>
-                        </div>
-                      <v-card-actions class="d-flex justify-end">
-                             <v-btn rounded @click="validate" color="primary" >
-                              tweet
-                              </v-btn>
-
-                        </v-card-actions>
-                  </v-card>
-
-            </v-dialog>
   </v-container>
 </template>
 
 <script>
 import post from '@/store/posts'
+import users from '@/store/users'
 import Alerts from '../series/Alerts.vue'
 
 export default {
@@ -97,6 +103,7 @@ export default {
       title: '',
       body: '',
       },
+      sheet:false,
       dataEdit: {},
       deleteItem: {},
       valid: true,
@@ -110,7 +117,7 @@ export default {
       textAlertOk: "",
       ok: false,
       errorAlert: false,    
-                  
+      users:{}
                 
              
 
@@ -120,12 +127,18 @@ export default {
 
     //realiza una solicitud para obtener una lista de productos.
       post.dispatch('getPost')
+      users.dispatch("getAllUsers")
+      
    },
    computed: {
     //retorno los post del state
     allPosts(){
-      return post.state.allPosts
+       const posts = [...post.state.allPosts] // Obtengo una copia del array original
+      return this.shuffle(posts) // Aplico la función shuffle y retorno el resultado
       },
+    getAllUsers() {
+      return users.state.allUsers;
+    },
     showAdd: {
        get() {
            return post.state.showAdd
@@ -136,6 +149,19 @@ export default {
     }
    },
    methods:{
+      getUserEmail(userId) {
+      const user = users.state.allUsers.find(user => user.id === userId);
+      console.log(user)
+      return user.correo;
+    },
+    shuffle(array) {
+    // Implementación de la función shuffle de Fisher-Yates
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  },
     //funcion para que v-dialog funcione
     openForm() {
         post.commit('setShowAdd', true)
@@ -240,29 +266,4 @@ export default {
   
 </script>
 <style scoped>
-
-.tweet-card {
-  width: 300px;
-  max-height: 300px;
-  margin-bottom: 24px;
-  border-radius: 12px;
-  box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.15);
-  border: 1px solid #e8e8e8;
-}
-
-.tweet-author {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin-left: 8px;
-}
-
-.tweet-author-name {
-  font-weight: bold;
-}
-
-.tweet-author-username {
-  color: #828282;
-  font-size: 0.8rem;
-}
 </style>

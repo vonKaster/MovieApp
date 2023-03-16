@@ -10,6 +10,8 @@ export default new Vuex.Store({
     state:{
       service: new service(),
       allPosts:[],
+      allComments:[],
+      postById:{},
       showAdd: false,
       new:[],
       edit:{},
@@ -17,7 +19,10 @@ export default new Vuex.Store({
     },
     mutations:{
         setAllPost(state, payload){
-            state.allPosts = payload
+            state.allPosts = payload;
+        },
+        setPostById(state, payload){
+          state.postById = payload;
         },
         setNew(state,data){
           state.new = data
@@ -31,6 +36,10 @@ export default new Vuex.Store({
         setDeleteItem(state, data) {
           state.deleteItem = data
         },
+        setAllComments(state, payload){
+          state.allComments = payload
+      },
+
        
      
 
@@ -52,6 +61,26 @@ export default new Vuex.Store({
         }
         });
          },
+
+         async getPostById(state, id) {
+          try {
+            let item = await state.state.service.getPostById(id);
+            state.commit("setPostById", item);
+            return item;
+          } catch (error) {
+            throw error;
+          }
+        },
+
+    async getComments(state, id) {
+      try {
+        let item = await state.state.service.getComments(id);
+        state.commit("setAllComments", item);
+        return item;
+      } catch (error) {
+        throw error;
+      }
+    },
 
         
         async new(state) {
