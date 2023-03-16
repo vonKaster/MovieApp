@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import UsersView from '../views/UsersView.vue'
 import UserView from '../views/UserView.vue'
+import PostView from '../views/PostView.vue'
 
 Vue.use(VueRouter)
 
@@ -15,6 +16,11 @@ const routes = [
     path: '/posts',
     name: 'posts',
     component: HomeView
+  },
+  {
+    path: '/posts/:id',
+    name: 'post',
+    component: PostView
   },
   {
     path: '/users',
