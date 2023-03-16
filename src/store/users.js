@@ -77,6 +77,7 @@ export default new Vuex.Store({
           allUsers = allUsers.map((user) => {
             if (user.id == data.id) {
               user = {
+                id: item.id,
                 nombre: item.name,
                 nombreUsuario: item.username,
                 correo: item.email,
