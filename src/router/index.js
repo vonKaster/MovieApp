@@ -6,6 +6,7 @@ import UsersView from '../views/UsersView.vue'
 import UserView from '../views/UserView.vue'
 import PostView from '../views/PostView.vue'
 
+
 Vue.use(VueRouter)
 
 const routes = [
