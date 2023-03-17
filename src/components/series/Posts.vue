@@ -2,7 +2,7 @@
 
   <v-container >
      <v-col cols="12">
-
+        <h1>Hola</h1>
           <v-btn class="mx-2" fab dark color="#6247AA" @click="openForm" >
               <v-icon>mdi-plus</v-icon>
           </v-btn>
