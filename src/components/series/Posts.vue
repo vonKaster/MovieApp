@@ -2,26 +2,23 @@
 
   <v-container >
      <v-col cols="12">
-        <h1>Hola</h1>
           <v-btn class="mx-2" fab dark color="#6247AA" @click="openForm" >
               <v-icon>mdi-plus</v-icon>
           </v-btn>
     </v-col>
-
      <v-container fluid>
     <v-row align="center" justify="center" v-for="(post, index) in allPosts" :key="index">
       <v-col cols="12" sm="8" md="6">
-
         <v-card class="tweet-card">
           <v-card-title>
-            <v-avatar size="36">
+          <router-link :to="{ name:'perfil', params: { id: post.userId } }" class="tweet-user-link">
+            <v-avatar size="40">
               <img :src="'https://i.pravatar.cc/100?img=' + post.userId" alt="">
             </v-avatar>
-
             <div class="tweet-user-info">
-              <div class="tweet-username ml-3">{{ getUserEmail(post.userId) }}</div>
-
+              <div class="tweet-username">{{ getUserEmail(post.userId) }}</div>
             </div>
+          </router-link>
             <v-spacer></v-spacer>
             <v-menu offset-y>
               <template v-slot:activator="{ on }">
@@ -32,9 +29,7 @@
                   <v-icon>mdi-pencil</v-icon>
                   <v-list-item-title>Edit</v-list-item-title>
                 </v-list-item>
-
                 <v-list-item @click="deleteProduct(post)">
-
                   <v-icon>mdi-delete</v-icon>
                   <v-list-item-title>Delete</v-list-item-title>
                 </v-list-item>
@@ -43,9 +38,7 @@
           </v-card-title>
           <v-card-text>{{ post.body }}</v-card-text>
           <v-card-actions>
-
-            <v-btn :to="{ name:'post', params: { id: post.id } }" text>Read more</v-btn>
-
+            <v-btn :to="{ name:'post', params: { id: post.id } }">Read more</v-btn>
             <v-spacer></v-spacer>
             <v-btn icon>
               <v-icon>mdi-heart</v-icon>
@@ -58,39 +51,6 @@
         
       </v-col>
     </v-row>
-    <v-dialog v-model="showAdd"  >
-                  <v-card>
-                  
-                         <v-btn text @click="cancel">
-                                x
-                      </v-btn>
-                    <v-row class="mt-2 ml-5 mb-5">
-                     <v-avatar size="40">
-                      <img :src="'https://i.pravatar.cc/100?img=' + data.userId" alt="">
-                    </v-avatar>
-                    </v-row>
-
-                        
-                        <div class="flex-center">
-                              <v-form ref="form" v-model="valid">
-                                     <v-alert dense v-if="error" color="red" elevation="5" outlined text type="error"
-                                          align="center" class="mr-1 ml-1">
-                                          {{ alertValidate }}</v-alert>
-                                    <v-text-field v-model="data.title" filled rounded dense label="titlePost"
-                                          :rules="rules" />
-                                    <v-textarea v-model="data.body" filled rounded dense label="What's Happenin?"
-                                          :rules="rules" />
-                              </v-form>
-                        </div>
-                      <v-card-actions class="d-flex justify-end">
-                             <v-btn rounded @click="validate" color="primary" >
-                              tweet
-                              </v-btn>
-
-                        </v-card-actions>
-                  </v-card>
-
-            </v-dialog>
   </v-container>
   <v-dialog v-model="showAdd" max-width="450">
   <v-card>
@@ -104,7 +64,7 @@
         <v-textarea
           v-model="data.body"
           filled
-          label="Qué está pasando?"
+          label="What's Happenin?"
           :rules="rules"
           rows="4"
           autofocus
@@ -129,10 +89,10 @@
 
   </v-container>
 </template>
+
 <script>
 import post from '@/store/posts'
 import users from '@/store/users'
-
 import Alerts from '../series/Alerts.vue'
 
 export default {
@@ -145,7 +105,6 @@ export default {
       title: '',
       body: '',
       },
-
       sheet:false,
       dataEdit: {},
       deleteItem: {},
@@ -161,7 +120,6 @@ export default {
       ok: false,
       errorAlert: false,    
       users:{}
-
                 
              
 
@@ -171,21 +129,18 @@ export default {
 
     //realiza una solicitud para obtener una lista de productos.
       post.dispatch('getPost')
-
       users.dispatch("getAllUsers")
       
-
    },
    computed: {
     //retorno los post del state
     allPosts(){
        const posts = [...post.state.allPosts] // Obtengo una copia del array original
-       return this.shuffle(posts) // Aplico la función shuffle y retorno el resultado
+      return this.shuffle(posts) // Aplico la función shuffle y retorno el resultado
       },
     getAllUsers() {
       return users.state.allUsers;
     },
-
     showAdd: {
        get() {
            return post.state.showAdd
@@ -196,10 +151,9 @@ export default {
     }
    },
    methods:{
-
       getUserEmail(userId) {
-      const user = users.state.allUsers.find(user => user.id === userId);
-      return user.correo;
+      const user = this.getAllUsers.find(user => user.id === userId);
+      return user.nombreUsuario;
     },
     shuffle(array) {
     // Implementación de la función shuffle de Fisher-Yates
@@ -209,7 +163,6 @@ export default {
     }
     return array;
   },
-
     //funcion para que v-dialog funcione
     openForm() {
         post.commit('setShowAdd', true)
@@ -314,4 +267,19 @@ export default {
   
 </script>
 <style scoped>
+.tweet-user-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color:#6247AA;
+}
+.tweet-user-link:hover {
+
+ color:#9874fb;
+}
+.tweet-username {
+  margin-left: 10px;
+  font-weight: bold;
+}
+
 </style>

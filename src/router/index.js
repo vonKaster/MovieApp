@@ -1,10 +1,10 @@
-
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import UsersView from '../views/UsersView.vue'
 import UserView from '../views/UserView.vue'
 import PostView from '../views/PostView.vue'
+import PerfilUserView from '../views/PerfilUserView.vue'
 
 
 Vue.use(VueRouter)
@@ -34,6 +34,11 @@ const routes = [
     path: '/users/:id',
     name: 'user',
     component: UserView
+  },
+  {
+    path: '/perfil/:id',
+    name: 'perfil',
+    component: PerfilUserView
   }
 ];
 
