@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-container class="d-flex justify-center">
-      
+      <h1>Hola</h1>
       <v-card class="elevation-2 justify-center" max-width="550">
         <v-card-title>
           <v-avatar size="48">
