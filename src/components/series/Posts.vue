@@ -1,13 +1,34 @@
 <template>
-
-  <v-container >
+  <v-row>
+    <v-col cols="2">
+  
+    </v-col>
+    <v-col cols="10">
+          <v-container >
+    <v-row class="d-flex justify-center">
      <v-col cols="12">
-          <v-btn class="mx-2" fab dark color="#6247AA" @click="openForm" >
+          <v-btn class="mx-2" fab dark color="#6247AA" @click="openForm" fixed
+      bottom
+      right >
               <v-icon>mdi-plus</v-icon>
           </v-btn>
+     </v-col>
+
+     <v-col cols="4">
+          <v-text-field
+          color="#6247AA"
+          v-model="search"
+          label="Filtrar por publicacion"
+          hide-details
+          prepend-icon="mdi-magnify"
+          single-line
+          @input="filterPosts"
+        >
+        </v-text-field>
     </v-col>
+    </v-row>
      <v-container fluid>
-    <v-row align="center" justify="center" v-for="(post, index) in allPosts" :key="index">
+    <v-row align="center" justify="center" v-for="(post, index) in filteredPosts" :key="index">
       <v-col cols="12" sm="8" md="6">
         <v-card class="tweet-card">
           <v-card-title>
@@ -27,24 +48,21 @@
               <v-list>
                 <v-list-item @click="openEdit(post)">
                   <v-icon>mdi-pencil</v-icon>
-                  <v-list-item-title>Edit</v-list-item-title>
+                  <v-list-item-title>Editar</v-list-item-title>
                 </v-list-item>
                 <v-list-item @click="deleteProduct(post)">
                   <v-icon>mdi-delete</v-icon>
-                  <v-list-item-title>Delete</v-list-item-title>
+                  <v-list-item-title>Eliminar</v-list-item-title>
                 </v-list-item>
               </v-list>
             </v-menu>
           </v-card-title>
           <v-card-text>{{ post.body }}</v-card-text>
           <v-card-actions>
-            <v-btn :to="{ name:'post', params: { id: post.id } }">Read more</v-btn>
+            <v-btn :to="{ name:'post', params: { id: post.id } }">Ver más</v-btn>
             <v-spacer></v-spacer>
             <v-btn icon>
               <v-icon>mdi-heart</v-icon>
-            </v-btn>
-            <v-btn icon>
-              <v-icon>mdi-share-variant</v-icon>
             </v-btn>
           </v-card-actions>
         </v-card>
@@ -88,15 +106,19 @@
 </v-dialog>
 
   </v-container>
+    </v-col>
+  </v-row>
+
 </template>
 
 <script>
 import post from '@/store/posts'
 import users from '@/store/users'
 import Alerts from '../series/Alerts.vue'
+import navLateral from '@/components/commons/navLateral.vue'
 
 export default {
-  components:{Alerts},
+  components:{Alerts, navLateral},
   data(){
     return{
        data:{
@@ -119,7 +141,8 @@ export default {
       textAlertOk: "",
       ok: false,
       errorAlert: false,    
-      users:{}
+      users:{},
+      search:''
                 
              
 
@@ -141,6 +164,12 @@ export default {
     getAllUsers() {
       return users.state.allUsers;
     },
+
+     filteredPosts(){
+      return post.state.allPosts.filter(post => {
+        return post.body.toLowerCase().includes(this.search.toLowerCase())
+      })
+    },
     showAdd: {
        get() {
            return post.state.showAdd
@@ -151,6 +180,12 @@ export default {
     }
    },
    methods:{
+     filterPosts() {
+      this.filteredPosts = post.state.allPosts.filter(post => {
+       return post.body.toLowerCase().includes(this.search.toLowerCase())
+    })
+    },
+
       getUserEmail(userId) {
       const user = this.getAllUsers.find(user => user.id === userId);
       return user.nombreUsuario;
