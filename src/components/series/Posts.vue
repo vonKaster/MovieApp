@@ -1,10 +1,8 @@
 <template>
   <v-row>
-    <v-col cols="2">
   
-    </v-col>
-    <v-col cols="10">
-          <v-container >
+    <v-col cols="12">
+    <v-container >
     <v-row class="d-flex justify-center">
      <v-col cols="12">
           <v-btn class="mx-2" fab dark color="#6247AA" @click="openForm" fixed
@@ -28,7 +26,7 @@
     </v-col>
     </v-row>
      <v-container fluid>
-    <v-row align="center" justify="center" v-for="(post, index) in filteredPosts" :key="index">
+    <v-row align="center" justify="center" v-for="(post, index) in shuffle(filteredPosts) " :key="index">
       <v-col cols="12" sm="8" md="6">
         <v-card class="tweet-card">
           <v-card-title>
@@ -61,9 +59,9 @@
           <v-card-actions>
             <v-btn :to="{ name:'post', params: { id: post.id } }">Ver más</v-btn>
             <v-spacer></v-spacer>
-            <v-btn icon>
+            <!-- <v-btn icon>
               <v-icon>mdi-heart</v-icon>
-            </v-btn>
+            </v-btn> -->
           </v-card-actions>
         </v-card>
         
@@ -147,6 +145,9 @@ export default {
              
 
     }
+  },
+    async created() {
+    document.title = "Digicard | Posts";
   },
    mounted() {
 
