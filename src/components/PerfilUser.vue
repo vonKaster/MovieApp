@@ -1,7 +1,15 @@
 <template>
   <v-container>
+     <div class="text-center mt-6" v-if="!isLoaded">
+        <v-progress-circular
+          :size="70"
+          :width="7"
+          :color="'#6247aa'"
+          indeterminate
+        ></v-progress-circular>
+     </div>
     <!-- Información del usuario -->
-    <v-row>
+    <v-row v-if="isLoaded">
       <v-col cols="4">
         <v-avatar size="120" class="ml-5">
           <img :src="'https://i.pravatar.cc/100?img='+ user.id" alt="photoUser">
@@ -15,11 +23,11 @@
                publicaciones
             </v-col>
              <v-col cols="4" class="text-center">
-              <p> 5 </p>
+              <p> {{ Math.floor(Math.random() * 161) + 40 }} </p>
                seguidos
             </v-col>
              <v-col cols="4" class="text-center">
-              <p> 15 </p>
+              <p> {{ Math.floor(Math.random() * 161) + 40 }}</p>
                seguidores
             </v-col>
    
@@ -60,7 +68,8 @@ export default {
       likes: 0,
      posts:[],
      postId:{},
-     user:{}
+     user:{},
+     isLoaded:false
     }
   },
 
@@ -78,6 +87,9 @@ export default {
     } catch (error) {
       console.log(error);
     }
+    setTimeout(() => {
+    this.isLoaded = true;
+  }, 500);
   },
   computed:{
        allPosts(){
