@@ -168,7 +168,9 @@ export default {
 
      filteredPosts(){
       return post.state.allPosts.filter(post => {
-        return post.body.toLowerCase().includes(this.search.toLowerCase())
+        const userEmail = this.getUserEmail(post.userId);
+         return post.body.toLowerCase().includes(this.search.toLowerCase()) ||
+           userEmail.toLowerCase().includes(this.search.toLowerCase());
       })
     },
     showAdd: {
@@ -183,7 +185,9 @@ export default {
    methods:{
      filterPosts() {
       this.filteredPosts = post.state.allPosts.filter(post => {
-       return post.body.toLowerCase().includes(this.search.toLowerCase())
+        const userEmail = this.getUserEmail(post.userId);
+       return post.body.toLowerCase().includes(this.search.toLowerCase()) ||
+        userEmail.toLowerCase().includes(this.search.toLowerCase());
     })
     },
 
