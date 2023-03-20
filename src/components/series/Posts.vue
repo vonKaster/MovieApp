@@ -1,20 +1,44 @@
 <template>
-  <v-container>
-    <v-row>
-      <v-col v-for="(post, index) in allPosts" :key="index" cols="12" sm="6" md="4">
+
+  <v-container >
+     <v-col cols="12">
+          <v-btn class="mx-2" fab dark color="#6247AA" @click="openForm" >
+              <v-icon>mdi-plus</v-icon>
+          </v-btn>
+    </v-col>
+     <v-container fluid>
+    <v-row align="center" justify="center" v-for="(post, index) in allPosts" :key="index">
+      <v-col cols="12" sm="8" md="6">
         <v-card class="tweet-card">
           <v-card-title>
-            <v-avatar size="36">
+          <router-link :to="{ name:'perfil', params: { id: post.userId } }" class="tweet-user-link">
+            <v-avatar size="40">
               <img :src="'https://i.pravatar.cc/100?img=' + post.userId" alt="">
             </v-avatar>
             <div class="tweet-user-info">
-              <div class="tweet-username">User {{ post.userId }}</div>
-              <div class="tweet-time">5 hours ago</div>
+              <div class="tweet-username">{{ getUserEmail(post.userId) }}</div>
             </div>
+          </router-link>
+            <v-spacer></v-spacer>
+            <v-menu offset-y>
+              <template v-slot:activator="{ on }">
+                <v-icon v-on="on" class="mx-2">mdi-dots-vertical</v-icon>
+              </template>
+              <v-list>
+                <v-list-item @click="openEdit(post)">
+                  <v-icon>mdi-pencil</v-icon>
+                  <v-list-item-title>Edit</v-list-item-title>
+                </v-list-item>
+                <v-list-item @click="deleteProduct(post)">
+                  <v-icon>mdi-delete</v-icon>
+                  <v-list-item-title>Delete</v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
           </v-card-title>
           <v-card-text>{{ post.body }}</v-card-text>
           <v-card-actions>
-            <v-btn :to="{ name: 'Post', params: { id: post.id } }" text>Read more</v-btn>
+            <v-btn :to="{ name:'post', params: { id: post.id } }">Read more</v-btn>
             <v-spacer></v-spacer>
             <v-btn icon>
               <v-icon>mdi-heart</v-icon>
@@ -24,60 +48,238 @@
             </v-btn>
           </v-card-actions>
         </v-card>
+        
       </v-col>
     </v-row>
   </v-container>
+  <v-dialog v-model="showAdd" max-width="450">
+  <v-card>
+    <v-card-title>
+      <v-avatar size="36">
+        <img :src="'https://i.pravatar.cc/100?img=' + data.userId" alt="">
+      </v-avatar>
+    </v-card-title>
+    <v-card-text>
+      <v-form ref="form" v-model="valid" @submit.prevent="validate">
+        <v-textarea
+          v-model="data.body"
+          filled
+          label="What's Happenin?"
+          :rules="rules"
+          rows="4"
+          autofocus
+          counter
+        ></v-textarea>
+      </v-form>
+    </v-card-text>
+    <v-card-actions>
+      <v-spacer></v-spacer>
+      <v-btn text color="primary" @click="cancel">Cancel</v-btn>
+      <v-btn
+        rounded
+        color="primary"
+        :disabled="!valid"
+        @click="validate"
+      >
+        tweet
+      </v-btn>
+    </v-card-actions>
+  </v-card>
+</v-dialog>
+
+  </v-container>
 </template>
-
-
-<style scoped>
-.tweet-card {
-  margin-bottom: 24px;
-  border-radius: 12px;
-  box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.15);
-  border: 1px solid #e8e8e8;
-}
-
-.tweet-author {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin-left: 8px;
-}
-
-.tweet-author-name {
-  font-weight: bold;
-}
-
-.tweet-author-username {
-  color: #828282;
-  font-size: 0.8rem;
-}
-</style>
-
-
 
 <script>
 import post from '@/store/posts'
+import users from '@/store/users'
+import Alerts from '../series/Alerts.vue'
+
 export default {
+  components:{Alerts},
   data(){
     return{
+       data:{
+      id:null,
+      userId: 1,
+      title: '',
+      body: '',
+      },
+      sheet:false,
+      dataEdit: {},
+      deleteItem: {},
+      valid: true,
+      rules: [(v) => !!v || "Campo requerido"],
+      error: false,
+      alertValidate: "",
+      isEdit: false,
+      showDelete: false,
+      colorError: '#FF8D58',
+      colorOk: '#09203f',
+      textAlertOk: "",
+      ok: false,
+      errorAlert: false,    
+      users:{}
+                
+             
 
     }
   },
    mounted() {
 
     //realiza una solicitud para obtener una lista de productos.
-      post.dispatch('getPosts').then(() => {
-        console.log('productos cargados')
-      });
+      post.dispatch('getPost')
+      users.dispatch("getAllUsers")
+      
    },
    computed: {
     //retorno los post del state
     allPosts(){
-      return post.state.allPosts
+       const posts = [...post.state.allPosts] // Obtengo una copia del array original
+      return this.shuffle(posts) // Aplico la función shuffle y retorno el resultado
+      },
+    getAllUsers() {
+      return users.state.allUsers;
+    },
+    showAdd: {
+       get() {
+           return post.state.showAdd
+        },
+       set(newValue) {
+          return newValue
+        }
+    }
+   },
+   methods:{
+      getUserEmail(userId) {
+      const user = this.getAllUsers.find(user => user.id === userId);
+      return user.nombreUsuario;
+    },
+    shuffle(array) {
+    // Implementación de la función shuffle de Fisher-Yates
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  },
+    //funcion para que v-dialog funcione
+    openForm() {
+        post.commit('setShowAdd', true)
+        this.showAdd = true
+    },
+    add() {
+    const payload = {
+      userId: this.data.userId,
+      title: this.data.title,
+      body: this.data.body
+    };
+
+    // se tiene que hacer el set en el store con lo editado
+    post.commit('setNew', payload)
+                  post.dispatch('new').then(() => {
+                        this.ok = true
+                        this.textAlertOk = 'add Correct'
+                  }).catch((e) => {
+                        this.errorAlert = true
+                        this.textAlertOk = e.response.data.error.message;
+                  })
+                  this.cancel()
+  },
+    openEdit(item) {
+                  this.isEdit = true
+                  post.commit('setShowAdd', true)
+                  this.showAdd = true
+                  this.data = {
+                        id:item.id,
+                        userId: this.data.userId,
+                        title: item.title,
+                        body: item.body
+      
+                  }
+            },
+            openDelete(item) {
+                  this.deleteItem = item.id
+            },
+            cancel() {
+                  post.commit('setShowAdd', false)
+                  this.showAdd = false
+                  if (!this.showAdd) {
+                        //saca las rules y resetea la info
+                        this.$refs.form.resetValidation();
+                        this.data = {
+                              id:null,
+                              userId: this.data.userId,
+                              title: '',
+                              body:''
+                        }
+                        this.isEdit = false
+                  } else {
+                        this.showDelete = false
+                  }
+            },
+            validate() {
+                  //valida si el form cumple con todo 
+                  let valid = this.$refs.form.validate()
+                  if (valid) {
+                        if (this.isEdit) {
+                              this.edit()
+                        } else {
+                              this.add()
+                        }
+                  } else {
+                        this.error = true
+                        this.alertValidate = 'post es requerido'
+                        setTimeout(() => {
+                              this.error = false;
+                        }, 2500);
+                  }
+            },
+            edit() {
+                  post.commit('setEdit', this.data)
+                  post.dispatch('edit').then(() => {
+                        this.ok = true
+                        this.textAlertOk ='edit Correct'
+                  }).catch((e) => {
+                        this.errorAlert = true
+                        this.textAlertOk ='no se edito ni mierda'
+                        console.log(e)
+                  })
+                  this.cancel()
+            },
+            deleteProduct(item) {
+                  this.deleteItem = item.id
+                  post.commit('setDeleteItem', this.deleteItem)
+                  post.dispatch('delete').then(() => {
+                        this.ok = true
+                        this.textAlertOk = 'delete correct'
+                  }).catch((e) => {
+                        this.errorAlert = true
+                        this.textAlertOk = e.response.data.error.message;
+                        conosole.log(e)
+                  })
+                  this.cancel()
+            },
+           
       }
-   }
+
+  }
   
-}
 </script>
+<style scoped>
+.tweet-user-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color:#6247AA;
+}
+.tweet-user-link:hover {
+
+ color:#9874fb;
+}
+.tweet-username {
+  margin-left: 10px;
+  font-weight: bold;
+}
+
+</style>
