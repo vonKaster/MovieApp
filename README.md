@@ -1,5 +1,6 @@
 # movieapp
 
+
 ## Project setup
 ```
 npm install
